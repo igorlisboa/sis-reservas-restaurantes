@@ -4,26 +4,24 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-
-const mongoose = require('mongoose');
-const appMiddlewares = require('./middlewares/appMiddlewares');
+const knex = require('knex');
+const app = express();
 
 //ROTAS
 const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
-const usuariosRouter = require('./routes/usuarios');
 
-const app = express();
 const config = require('./config');
 
 //conexao do banco de dados
-mongoose.connect('mongodb://127.0.0.1:27017/nextbeer');
-
-//inicia uma configuração default 
-mongoose.connection.on('connected', ()=>{
-	config.configureDefaultUser();
-});
-
+// knex({
+//     client: 'mysql',
+//     connection: {
+//         host : '127.0.0.1',
+//         user : 'restabgd',
+//         password : 'restabgd',
+//         database : 'restauranteDoBigode'
+//     }
+// });
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -31,11 +29,15 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+
 //inicialização das rotas que acessam os metodos HTTP(get,post,put,delete)
 // aqui vai ter uma rota para direcionar para cada caso de uso e seus controllers
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/usuarios', usuariosRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

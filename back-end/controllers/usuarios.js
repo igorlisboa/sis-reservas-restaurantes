@@ -1,35 +1,37 @@
-const Usuarios = require('../models/usuarios');
+const mysql = require('mysql');
 
-index = async (req,res) =>{
-	let usuarios = await Usuarios.find({});
-	res.status(200).json({ success: { usuarios }});
+const config = require('../config');
+
+salvaUsuario = (req, res) => {
+	let novoUsuario = req.body.usuario;
+	let  db = mysql.createConnection(config);
+	db.connect();
+    // db.query("INSERT INTO `usuarios` (`nome`, `email`, `telefone`) VALUES ( '"+novoUsuario.nome+"', '"+novoUsuario.email+"', '"+novoUsuario.telefone+"');",
+        db.query("INSERT INTO usuarios SET ?", novoUsuario,
+		(err, result)=>{
+			if(err){
+				res.status(400).json({ fail : {err}});
+                throw err;
+			}
+            db.end();
+            res.json(JSON.stringify({ success: { result }}));
+           	res.status(200);//.send({ success: { result }});//.json({ success: { result }});
+        })
 };
 
-
-save = async (req,res) =>{
-	let novoUsuario = new Usuarios(req.body);
-	await novoUsuario.save();
-	console.info("Save is working");
-	return res.send("So Jesus salva!");
-};
-
-update = async (req,res) =>{
-	let atualizaUsuario = await Usuarios.where({_id:req.body._id}).update(req.body.dados).exec()
-	.then(()=>{
-		console.info("Update is working");
-		return res.send("Atualizou a bagaça");
-	});
-};
-
-del = async (req,res) =>{
-	let novoUsuario = await Usuarios.remove({_id : req.body._id}, ()=>{
-		return res.send("Apagou tio!");	
-	})
+buscaPorEmail = (req, res)=>{
+	let email = req.body.email;
+    let  db = mysql.createConnection(config);
+    db.connect();
+	db.query();
+	db.end();
 };
 
 module.exports = {
-	index,
-	save,
-	del,
-	update
+
+	salvaUsuario,
+	buscaPorEmail
+
 }
+
+// "INSERT INTO `usuarios` (`nome_usuario`, `email`, `telefone`) VALUES ('"+novoUsuario.nome+"', '"+novoUsuario.email+"', '"+novoUsuario.telefone+"')"

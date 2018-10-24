@@ -16,7 +16,7 @@
 #
 # The Initial Developer of the Original Code is Mozilla Corporation.
 # Portions created by the Initial Developer are Copyright (C) 2009
-# the Initial Developer. All Rights Reserved.
+# the Initial Developer. Todos os direitos reservados.
 #
 # Contributor(s):
 #   John Daggett <jdaggett@mozilla.com>

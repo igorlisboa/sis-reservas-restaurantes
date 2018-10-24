@@ -2,6 +2,8 @@
 (function ($) {
     "use strict";
 
+
+
     /*[ Load page ]
     ===========================================================*/
     $(".animsition").animsition({
@@ -50,9 +52,15 @@
 
     /*[ Daterangepicker ]
     ===========================================================*/
+    let dataInicial = new Date();
+    let dataFinal = new Date();
+    dataInicial.setDate(dataInicial.getDate()+1);
+    dataFinal.setDate(dataInicial.getDate()+30);
     $('.my-calendar').daterangepicker({
         "singleDatePicker": true,
         "showDropdowns": true,
+        "minDate" : dataInicial,
+        "maxDate" : dataFinal,
         locale: {
             format: 'DD/MM/YYYY'
         },
